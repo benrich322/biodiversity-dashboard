@@ -5,3 +5,9 @@ const url = "https://2u-data-curriculum-team.s3.amazonaws.com/dataviz-classroom/
 d3.json(url).then(function(data) {
   console.log(data.samples);
 });
+
+// Initialize dashboard
+function init() {
+    // Use D3 to select the dropdown menu
+    let dropdownMenu = d3.select("#selDataset");
+  
