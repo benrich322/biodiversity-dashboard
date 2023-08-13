@@ -78,4 +78,16 @@ d3.json(url).then(function(data) {
     };
 
     Plotly.newPlot("bubble", bubbleData,layout);
+
+    // display metadata
+    let metadata = data.metadata[0];
+    console.log ("metadata",metadata);
+
+    const metadata_container = d3.select("#sample-metadata");
+
+    for (const key in metadata) {
+        metadata_container.append("p")
+            .text(`${key}: ${metadata[key]}`);
+    }
+
 });
