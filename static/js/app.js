@@ -51,6 +51,25 @@ d3.json(url).then(function(data) {
     }];
 
     Plotly.newPlot("bar", plotData);
-});
 
     // create a bubble chart
+    let bubbleData = [{
+        // Use otu_ids for x values
+        x: combined_data.map(entry => entry.otu_id), 
+        // Use sample_values for y values
+        y: combined_data.map(entry => entry.value), 
+        // Use otu_labels for text values
+        text: combined_data.map(entry => entry.otu_label),
+        mode: 'markers',
+        marker: {
+            // Use sample_values for marker size
+            size: combined_data.map(entry => entry.value), 
+            // Use otu_ids for marker colors
+            color: combined_data.map(entry => entry.otu_id),
+            // Choose a colorscale
+            colorscale: 'Earth' 
+        }
+    }];
+
+    Plotly.newPlot("bubble", bubbleData);
+});
