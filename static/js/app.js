@@ -8,8 +8,10 @@ d3.json(url).then(function(data) {
    let samples_data = data.samples[0]
    let out_ids = samples_data.otu_ids
    let sample_values = samples_data.sample_values
-   let top_10_OTU_IDs = out_ids.slice(0, 10)
+   //let top_10_OTU_IDs = out_ids.slice(0, 10)
    let top_10_Sample_Values = sample_values.slice(0, 10)
+   // Add 'OTU' in front
+   let top_10_OTU_IDs = out_ids.slice(0, 10).map(id => 'OTU ' + id.toString());
    console.log('Top 10 OTU IDs',top_10_OTU_IDs)
    console.log('Top 10 Sample Values',top_10_Sample_Values)
    // Create Plotly plot
