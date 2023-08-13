@@ -19,17 +19,21 @@ d3.json(url).then(function(data) {
     console.log('Top 10 OTU IDs',top_10_otu_ids)
     console.log('Top 10 Sample Values',top_10_sample_values)
 
+    // Sort the data in ascending order
+    let sortedIndices = top_10_sample_values
+    .map((_, index) => index)
+    .sort((a, b) => top_10_sample_values[a] - top_10_sample_values[b]);
+
+    let sortedSampleValues = sortedIndices.map(index => top_10_sample_values[index]);
+    let sortedOTUIds = sortedIndices.map(index => top_10_otu_ids[index]);
+
     // create Plotly plot
     let plotData = [{
-        x: top_10_sample_values,
-        y: top_10_otu_ids,
+        x: sortedSampleValues,
+        y: sortedOTUIds,
         type: 'bar',
         orientation: 'h'
     }];
-    
-    // sort the data in ascending order
-    //plotData[0].x.sort((a, b) => a - b);
-    //plotData[0].y.sort((a, b) => a - b);
 
     let layout = {
         title: 'Top 10 OTU IDs vs Sample Values',
@@ -42,4 +46,5 @@ d3.json(url).then(function(data) {
     };
 
     Plotly.newPlot("bar", plotData, layout);
+
 });
