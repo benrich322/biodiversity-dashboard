@@ -71,5 +71,11 @@ d3.json(url).then(function(data) {
         }
     }];
 
-    Plotly.newPlot("bubble", bubbleData);
+    let layout = {
+        xaxis: {
+            title: 'OTU ID'
+        }
+    };
+
+    Plotly.newPlot("bubble", bubbleData,layout);
 });
