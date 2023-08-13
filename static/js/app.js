@@ -134,6 +134,18 @@ function updateChartsAndMetadata(data, sampleId) {
 
     Plotly.newPlot("bar", updatedBarData);
 
-    
+    // Update bubble chart data
+    let updatedBubbleData = [{
+        x: selectedSampleData.otu_ids,
+        y: selectedSampleData.sample_values,
+        text: selectedSampleData.otu_labels,
+        mode: 'markers',
+        marker: {
+            size: selectedSampleData.sample_values,
+            color: selectedSampleData.otu_ids,
+            colorscale: 'Earth',
+        }
+    }];
 
+    Plotly.newPlot("bubble", updatedBubbleData);
 }
