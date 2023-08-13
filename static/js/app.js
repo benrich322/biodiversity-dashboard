@@ -5,6 +5,7 @@ d3.json(url).then(function(data) {
 
     console.log('All Data',data);
 
+    // create a samples data object
     let samples_data = data.samples[0];
     console.log('Sample Data',data.samples[0]);
 
@@ -21,13 +22,17 @@ d3.json(url).then(function(data) {
             value: value,
             otu_id: otu_ids[index],
         }));
+    console.log('Combined Data',combined_data)
+
+    // sort the combined_data array
     let sorted_data = combined_data.sort((a, b) => b.value - a.value);
     console.log('Sorted Data',sorted_data)
 
+    // slice the top 10 from the sorted_data array
     let top_10_sorted_data = sorted_data.slice(0, 10);
     console.log('Top 10 Data',top_10_sorted_data)
 
-    // create Plotly plot
+    // create bar plot
     let plotData = [{
         x: top_10_sorted_data.map(entry => entry.value), // Use the values from sortedData
         y: top_10_sorted_data.map(entry => 'OTU ' + entry.otu_id.toString()), // Use the OTU IDs from sortedData
