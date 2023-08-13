@@ -17,10 +17,15 @@ d3.json(url).then(function(data) {
     let sample_values = samples_data.sample_values;
     console.log('Sample Values',sample_values);
 
+    // hold the array of OTU Labels extracted from the samples_data object
+    let otu_labels = samples_data.otu_labels;
+    console.log('OTU Labels',otu_labels);
+
     // combine sample values and OTU IDs
     let combined_data = sample_values.map((value, index) => ({
             value: value,
             otu_id: otu_ids[index],
+            otu_label: otu_labels[index]
         }));
     console.log('Combined Data',combined_data)
 
@@ -39,9 +44,13 @@ d3.json(url).then(function(data) {
         x: top_10_sorted_data.map(entry => entry.value),
         // use the OTU IDs from top_10_sorted_data
         y: top_10_sorted_data.map(entry => 'OTU ' + entry.otu_id.toString()),
+        // Use the otu_labels as hover text
+        text: top_10_sorted_data.map(entry => entry.otu_label), 
         type: 'bar',
         orientation: 'h',
     }];
 
     Plotly.newPlot("bar", plotData);
 });
+
+    // create a bubble chart
