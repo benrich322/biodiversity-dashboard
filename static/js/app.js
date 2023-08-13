@@ -114,8 +114,6 @@ function updateChartsAndMetadata(data, sampleId) {
 
     const selectedSampleData = data.samples.find(sample => sample.id === sampleId);
 
-
-
     const selectedMetadata = data.metadata.find(meta => meta.id === +sampleId); // Convert sampleId to number for comparison
     const metadataContainer = d3.select("#sample-metadata");
     metadataContainer.html(""); // Clear existing content
@@ -124,5 +122,18 @@ function updateChartsAndMetadata(data, sampleId) {
         metadataContainer.append("p")
             .text(`${key}: ${selectedMetadata[key]}`);
         }
+
+    // Update bar plot data
+    let updatedBarData = [{
+        x: selectedSampleData.sample_values.slice(0, 10).reverse(),
+        y: selectedSampleData.otu_ids.slice(0, 10).map(id => 'OTU ' + id.toString()).reverse(),
+        text: selectedSampleData.otu_labels.slice(0, 10).reverse(),
+        type: 'bar',
+        orientation: 'h',
+    }];
+
+    Plotly.newPlot("bar", updatedBarData);
+
+    
 
 }
