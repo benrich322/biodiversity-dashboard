@@ -16,18 +16,19 @@ d3.json(url).then(function(data) {
    console.log('Top 10 Sample Values',top_10_Sample_Values)
    // Create Plotly plot
    let plotData = [{
-    x: top_10_OTU_IDs,
-    y: top_10_Sample_Values,
-    type: 'bar'
+    x: top_10_Sample_Values,
+    y: top_10_OTU_IDs,
+    type: 'bar',
+    orientation: 'h'
     }];
 
   let layout = {
     title: 'Top 10 OTU IDs vs Sample Values',
     xaxis: {
-      title: 'OTU IDs'
+      title: 'Sample Values'
     },
     yaxis: {
-      title: 'Sample Values'
+      title: 'OTU IDs'
     }
   };
 
