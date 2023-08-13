@@ -102,7 +102,27 @@ d3.json(url).then(function(data) {
 
     dropdown.on("change", function() {
       const selectedSampleId = this.value;
+      updateChartsAndMetadata(data, selectedSampleId);
     
     });
 
+    updateChartsAndMetadata(data, selectedSampleId);
+
 });
+
+function updateChartsAndMetadata(data, sampleId) {
+
+    const selectedSampleData = data.samples.find(sample => sample.id === sampleId);
+
+
+
+    const selectedMetadata = data.metadata.find(meta => meta.id === +sampleId); // Convert sampleId to number for comparison
+    const metadataContainer = d3.select("#sample-metadata");
+    metadataContainer.html(""); // Clear existing content
+
+    for (const key in selectedMetadata) {
+        metadataContainer.append("p")
+            .text(`${key}: ${selectedMetadata[key]}`);
+        }
+
+}
