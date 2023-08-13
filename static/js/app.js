@@ -90,4 +90,19 @@ d3.json(url).then(function(data) {
             .text(`${key}: ${metadata[key]}`);
     }
 
+    // Select the dropdown element
+    const dropdown = d3.select("#selDataset");
+
+    data.samples.forEach(sample => {
+        dropdown.append("option")
+        // Use a unique identifier for each sample
+            .attr("value", sample.id)
+            .text(sample.id);
+    });
+
+    dropdown.on("change", function() {
+      const selectedSampleId = this.value;
+    
+    });
+
 });
