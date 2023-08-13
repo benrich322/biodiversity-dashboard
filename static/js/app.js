@@ -30,26 +30,18 @@ d3.json(url).then(function(data) {
 
     // slice the top 10 from the sorted_data array
     let top_10_sorted_data = sorted_data.slice(0, 10);
+    top_10_sorted_data.reverse();
     console.log('Top 10 Data',top_10_sorted_data)
 
     // create bar plot
     let plotData = [{
-        x: top_10_sorted_data.map(entry => entry.value), // Use the values from sortedData
-        y: top_10_sorted_data.map(entry => 'OTU ' + entry.otu_id.toString()), // Use the OTU IDs from sortedData
+        // use the values from top_10_sorted_data
+        x: top_10_sorted_data.map(entry => entry.value),
+        // use the OTU IDs from top_10_sorted_data
+        y: top_10_sorted_data.map(entry => 'OTU ' + entry.otu_id.toString()),
         type: 'bar',
         orientation: 'h',
     }];
 
-    let layout = {
-        title: 'Top 10 OTU IDs vs Sample Values',
-        xaxis: {
-            title: 'Sample Values'
-        },
-        yaxis: {
-            title: 'OTU IDs'
-        }
-    };
-
-    Plotly.newPlot("bar", plotData, layout);
-
+    Plotly.newPlot("bar", plotData);
 });
