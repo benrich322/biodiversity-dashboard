@@ -37,7 +37,7 @@ d3.json(url).then(function(data) {
         x: sorted_sample_values,
         y: sorted_otu_ids,
         type: 'bar',
-        orientation: 'h'
+        orientation: 'h',
     }];
 
     let layout = {
