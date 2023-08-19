@@ -6,9 +6,14 @@ d3.json(url).then(function(data) {
 
     console.log('All Data',data);
 
-    // Select the dropdown element
-    const dropdown = d3.select("#selDataset");
+    // create a samples data object
+    let samples_data = data.samples;
+    console.log('Sample Data',data.samples);
 
+    // select the dropdown element
+    let dropdown = d3.select("#selDataset");
+
+    // loops through each sample object in the data.samples array
     data.samples.forEach(sample => {
         dropdown.append("option")
         // Use a unique identifier for each sample
@@ -16,14 +21,13 @@ d3.json(url).then(function(data) {
             .text(sample.id);
     });
 
-    let defaultSelectedSampleId = data.samples[0];
-    console.log('test',defaultSelectedSampleId);
+    let default_sample_id = data.samples[0];
 
-    updateChartsAndMetadata(data, defaultSelectedSampleId);
+    updateChartsAndMetadata(data, default_sample_id);
 
     dropdown.on("change", function() {
-      const selectedSampleId = this.value;
-      updateChartsAndMetadata(data, selectedSampleId);
+      let selected_sample_id = this.value;
+      updateChartsAndMetadata(data, selected_sample_id);
     
     });
 
@@ -32,11 +36,11 @@ d3.json(url).then(function(data) {
 
 init();
 
-function updateChartsAndMetadata(data, sampleId) {
+function updateChartsAndMetadata(data, sample_id) {
 
-    const selectedSampleData = data.samples.find(sample => sample.id === sampleId);
+    const selectedSampleData = data.samples.find(sample => sample.id === sample_id);
 
-    const selectedMetadata = data.metadata.find(meta => meta.id === +sampleId); // Convert sampleId to number for comparison
+    const selectedMetadata = data.metadata.find(meta => meta.id === sample_id); // Convert sampleId to number for comparison
     const metadataContainer = d3.select("#sample-metadata");
     metadataContainer.html(""); // Clear existing content
 
