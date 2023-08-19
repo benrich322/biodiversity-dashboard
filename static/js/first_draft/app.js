@@ -1,46 +1,13 @@
 const url = "https://2u-data-curriculum-team.s3.amazonaws.com/dataviz-classroom/v1.1/14-Interactive-Web-Visualizations/02-Homework/samples.json";
 
-function init() {
 // fetch the JSON data and console log it
 d3.json(url).then(function(data) {
 
     console.log('All Data',data);
 
-    // select the dropdown element
-    let dropdown = d3.select("#selDataset");
-
-    // loops through each sample object in the data.samples array
-    data.samples.forEach(sample => {
-        dropdown.append("option")
-        // Use a unique identifier for each sample
-            .attr("value", sample.id)
-            .text(sample.id);
-    });
-
-    let selected_sample_id = data.samples[0].id;
-    update_charts(data, selected_sample_id);
-
-    dropdown.on("change", function() {
-        console.log("Dropdown value changed");
-        let selected_sample_id = this.value;
-        console.log("Selected sample ID:", selected_sample_id);
-        update_charts(data, selected_sample_id);
-    
-    });
-
-});
-}
-
-init();
-
-
-function update_charts(data, sample_id) {
-
-    console.log('Sample Data',data.samples);
-
-    // find the sample object within the data.samples array that matches the sample_id variable
-    let samples_data = data.samples.find(sample => sample.id === sample_id);
-    console.log('Sample Data ID',samples_data);
+    // create a samples data object
+    let samples_data = data.samples[0];
+    console.log('Sample Data',data.samples[0]);
 
     // hold the array of OTU IDs extracted from the samples_data object    
     let otu_ids = samples_data.otu_ids;
@@ -56,10 +23,10 @@ function update_charts(data, sample_id) {
 
     // combine sample values and OTU IDs
     let combined_data = sample_values.map((value, index) => ({
-        value: value,
-        otu_id: otu_ids[index],
-        otu_label: otu_labels[index]
-    }));
+            value: value,
+            otu_id: otu_ids[index],
+            otu_label: otu_labels[index]
+        }));
     console.log('Combined Data',combined_data)
 
     // sort the combined_data array
@@ -70,7 +37,6 @@ function update_charts(data, sample_id) {
     let top_10_sorted_data = sorted_data.slice(0, 10);
     top_10_sorted_data.reverse();
     console.log('Top 10 Data',top_10_sorted_data)
-
 
     // create bar plot
     let plotData = [{
@@ -112,17 +78,74 @@ function update_charts(data, sample_id) {
     };
 
     Plotly.newPlot("bubble", bubbleData,layout);
+
+    // display metadata
+    let metadata = data.metadata[0];
+    console.log ("metadata",metadata);
+
+    const metadata_container = d3.select("#sample-metadata");
+
+    for (const key in metadata) {
+        metadata_container.append("p")
+            .text(`${key}: ${metadata[key]}`);
+    }
+
+    // Select the dropdown element
+    const dropdown = d3.select("#selDataset");
+
+    data.samples.forEach(sample => {
+        dropdown.append("option")
+        // Use a unique identifier for each sample
+            .attr("value", sample.id)
+            .text(sample.id);
+    });
+
+    dropdown.on("change", function() {
+      const selectedSampleId = this.value;
+      updateChartsAndMetadata(data, selectedSampleId);
+    
+    });
+
+    updateChartsAndMetadata(data, selectedSampleId);
+
+});
+
+function updateChartsAndMetadata(data, sampleId) {
+
+    const selectedSampleData = data.samples.find(sample => sample.id === sampleId);
+
+    const selectedMetadata = data.metadata.find(meta => meta.id === +sampleId); // Convert sampleId to number for comparison
+    const metadataContainer = d3.select("#sample-metadata");
+    metadataContainer.html(""); // Clear existing content
+
+    for (const key in selectedMetadata) {
+        metadataContainer.append("p")
+            .text(`${key}: ${selectedMetadata[key]}`);
+        }
+
+    // Update bar plot data
+    let updatedBarData = [{
+        x: selectedSampleData.sample_values.slice(0, 10).reverse(),
+        y: selectedSampleData.otu_ids.slice(0, 10).map(id => 'OTU ' + id.toString()).reverse(),
+        text: selectedSampleData.otu_labels.slice(0, 10).reverse(),
+        type: 'bar',
+        orientation: 'h',
+    }];
+
+    Plotly.newPlot("bar", updatedBarData);
+
+    // Update bubble chart data
+    let updatedBubbleData = [{
+        x: selectedSampleData.otu_ids,
+        y: selectedSampleData.sample_values,
+        text: selectedSampleData.otu_labels,
+        mode: 'markers',
+        marker: {
+            size: selectedSampleData.sample_values,
+            color: selectedSampleData.otu_ids,
+            colorscale: 'Earth',
+        }
+    }];
+
+    Plotly.newPlot("bubble", updatedBubbleData);
 }
-
-
-
-
-//    const selectedMetadata = data.metadata.find(meta => meta.id === sample_id); // Convert sampleId to number for comparison
-//    const metadataContainer = d3.select("#sample-metadata");
-//    metadataContainer.html(""); // Clear existing content
-
-//    for (const key in selectedMetadata) {
-//        metadataContainer.append("p")
-//            .text(`${key}: ${selectedMetadata[key]}`);
-//        }
-    // create a samples data object
