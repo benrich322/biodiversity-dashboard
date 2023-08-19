@@ -6,10 +6,6 @@ d3.json(url).then(function(data) {
 
     console.log('All Data',data);
 
-    // create a samples data object
-    let samples_data = data.samples;
-    console.log('Sample Data',data.samples);
-
     // select the dropdown element
     let dropdown = d3.select("#selDataset");
 
@@ -21,13 +17,13 @@ d3.json(url).then(function(data) {
             .text(sample.id);
     });
 
-    let default_sample_id = data.samples[0];
-
-    updateChartsAndMetadata(data, default_sample_id);
+    let selected_sample_id = data.samples[0];
 
     dropdown.on("change", function() {
-      let selected_sample_id = this.value;
-      updateChartsAndMetadata(data, selected_sample_id);
+        console.log("Dropdown value changed");
+        let selected_sample_id = this.value;
+        console.log("Selected sample ID:", selected_sample_id);
+        updateChartsAndMetadata(data, selected_sample_id);
     
     });
 
@@ -36,27 +32,18 @@ d3.json(url).then(function(data) {
 
 init();
 
+
 function updateChartsAndMetadata(data, sample_id) {
 
-    const selectedSampleData = data.samples.find(sample => sample.id === sample_id);
+    console.log('Sample Data',data.samples);
 
-    const selectedMetadata = data.metadata.find(meta => meta.id === sample_id); // Convert sampleId to number for comparison
-    const metadataContainer = d3.select("#sample-metadata");
-    metadataContainer.html(""); // Clear existing content
+    // find the sample object within the data.samples array that matches the sample_id variable
+    let samples_data = data.samples.find(sample => sample.id === sample_id);
+    console.log('Sample Data ID',samples_data);
 
-    for (const key in selectedMetadata) {
-        metadataContainer.append("p")
-            .text(`${key}: ${selectedMetadata[key]}`);
-        }
-
-
-// create a samples data object
-let samples_data = data.samples[0];
-console.log('Sample Data',data.samples[0]);
-
-// hold the array of OTU IDs extracted from the samples_data object    
-let otu_ids = samples_data.otu_ids;
-console.log('OTU IDs',otu_ids);
+    // hold the array of OTU IDs extracted from the samples_data object    
+    let otu_ids = samples_data.otu_ids;
+    console.log('OTU IDs',otu_ids);
 
 // hold the array of Sample Values extracted from the samples_data object
 let sample_values = samples_data.sample_values;
@@ -125,3 +112,16 @@ console.log('Top 10 Data',top_10_sorted_data)
 
     Plotly.newPlot("bubble", bubbleData,layout);
 }
+
+
+
+
+//    const selectedMetadata = data.metadata.find(meta => meta.id === sample_id); // Convert sampleId to number for comparison
+//    const metadataContainer = d3.select("#sample-metadata");
+//    metadataContainer.html(""); // Clear existing content
+
+//    for (const key in selectedMetadata) {
+//        metadataContainer.append("p")
+//            .text(`${key}: ${selectedMetadata[key]}`);
+//        }
+    // create a samples data object
