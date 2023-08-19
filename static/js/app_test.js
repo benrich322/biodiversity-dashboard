@@ -17,13 +17,14 @@ d3.json(url).then(function(data) {
             .text(sample.id);
     });
 
-    let selected_sample_id = data.samples[0];
+    let selected_sample_id = data.samples[0].id;
+    update_charts(data, selected_sample_id);
 
     dropdown.on("change", function() {
         console.log("Dropdown value changed");
         let selected_sample_id = this.value;
         console.log("Selected sample ID:", selected_sample_id);
-        updateChartsAndMetadata(data, selected_sample_id);
+        update_charts(data, selected_sample_id);
     
     });
 
@@ -33,7 +34,7 @@ d3.json(url).then(function(data) {
 init();
 
 
-function updateChartsAndMetadata(data, sample_id) {
+function update_charts(data, sample_id) {
 
     console.log('Sample Data',data.samples);
 
@@ -45,30 +46,30 @@ function updateChartsAndMetadata(data, sample_id) {
     let otu_ids = samples_data.otu_ids;
     console.log('OTU IDs',otu_ids);
 
-// hold the array of Sample Values extracted from the samples_data object
-let sample_values = samples_data.sample_values;
-console.log('Sample Values',sample_values);
+    // hold the array of Sample Values extracted from the samples_data object
+    let sample_values = samples_data.sample_values;
+    console.log('Sample Values',sample_values);
 
-// hold the array of OTU Labels extracted from the samples_data object
-let otu_labels = samples_data.otu_labels;
-console.log('OTU Labels',otu_labels);
+    // hold the array of OTU Labels extracted from the samples_data object
+    let otu_labels = samples_data.otu_labels;
+    console.log('OTU Labels',otu_labels);
 
-// combine sample values and OTU IDs
-let combined_data = sample_values.map((value, index) => ({
+    // combine sample values and OTU IDs
+    let combined_data = sample_values.map((value, index) => ({
         value: value,
         otu_id: otu_ids[index],
         otu_label: otu_labels[index]
     }));
-console.log('Combined Data',combined_data)
+    console.log('Combined Data',combined_data)
 
-// sort the combined_data array
-let sorted_data = combined_data.sort((a, b) => b.value - a.value);
-console.log('Sorted Data',sorted_data)
+    // sort the combined_data array
+    let sorted_data = combined_data.sort((a, b) => b.value - a.value);
+    console.log('Sorted Data',sorted_data)
 
-// slice the top 10 from the sorted_data array
-let top_10_sorted_data = sorted_data.slice(0, 10);
-top_10_sorted_data.reverse();
-console.log('Top 10 Data',top_10_sorted_data)
+    // slice the top 10 from the sorted_data array
+    let top_10_sorted_data = sorted_data.slice(0, 10);
+    top_10_sorted_data.reverse();
+    console.log('Top 10 Data',top_10_sorted_data)
 
 
     // create bar plot
